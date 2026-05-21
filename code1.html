@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <style>
+        #bg-video {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100; /* This pushes it to the very back */
+    object-fit: cover;
+}
+    /* 2-Column Grid Layout */
+    .product-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* Two columns */
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .card {
+        background: white;
+        border-radius: 12px;
+        padding: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+
+    
+    
+
+    .price { color: #ee4d2d; font-weight: bold; font-size: 1.1em; }
+    .tambah-btn { background: #ee4d2d; color: white; border: none; width: 100%; padding: 8px; border-radius: 5px; cursor: pointer; }
+</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>aldsMart </title>
+    <style>
+ 
+    /* Add this inside your style block */
+    #bg-video {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -1;
+    }
+
+ /* Loading Screen */
+        #loading-screen { position: fixed; width: 100%; height: 100%; background: #ffffff; top: 0; left: 0; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; transition: opacity 0.5s ease; }
+        .spinner { width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid #ff4757; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Dynamic Background */
+        
+        body { font-family: 'Segoe UI', sans-serif; animation: colorShift 15s infinite; min-height: 100vh; padding: 20px; display: flex; gap: 20px; color: #333; }
+        
+        /* Search Bar */
+        #searchBar { width: 100%; padding: 15px; margin-bottom: 20px; border: 3px solid #003366; border-radius: 50px; font-size: 16px; box-sizing: border-box; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+
+        .shop { flex: 3; }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .card { background: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 20px; text-align: center; border: 4px solid #003366; box-shadow: 0 10px 20px rgba(0,0,0,0.1); transition: transform 0.3s; }
+        .card:hover { transform: translateY(-5px); }
+        img { width: 100%; height: 150px; object-fit: contain; border-radius: 8px; }
+        
+        button { background: #ff4757; color: white; border: none; padding: 12px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
+        .cart { flex: 1; background: white; padding: 20px; border-radius: 20px; height: fit-content; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .checkout-btn { background: #2ed573; width: 100%; font-weight: bold; margin-top: 20px; padding: 15px; border-radius: 50px; color: white; border: none; }
+        /* Make the body a flex container */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* Make your main shop content take up the available space */
+.shop-wrapper {
+    flex: 1;
+}
+
+/* Style the footer */
+footer {
+    padding: 20px;
+    text-align: center;
+    background: #f4c2c2; /* Match your background */
+    margin-top: auto; /* This pushes it to the bottom */
+}
+/* Add space above and below the Scan button */
+.scan-button-container {
+    margin: 20px 0;
+    text-align: center;
+}
+
+/* Add space between your cards and the container */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px; /* This creates the gap between cards */
+    padding: 20px;
+}
+
+/* Add inner space (padding) inside the cards so text doesn't touch the edge */
+.card {
+    padding: 20px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    background: white;
+}
+/* Add this inside your <style> block */
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;     /* This ensures the ENTIRE card is shown */
+    background-color: #f9f9f9; /* This fills the "empty" space with a light color */
+    border-radius: 8px;
+    display: block;          /* This prevents extra space from appearing under the image */
+}
+    </style>
+</head>
+<body>
+   <video autoplay muted loop playsinline id="bg-video">
+    <source src="bg.mp4" type="video/mp4">
+</video>
+
+    <div id="loading-screen">
+        <div class="spinner"></div>
+        <h2 style="color: #ff4757;">aldsMart Loading...</h2>
+    </div>
+
+
+    <div class="shop">
+        <h1 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">aldsMart</h1>
+        <div class="section-box" style="background: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 20px; border-left: 5px solid #003366; margin-bottom: 20px;">
+    <h3 style="margin-top: 0; color: #003366;">✨ Selamat Datang di aldsMart</h3>
+    <p style="font-size: 0.95em; line-height: 1.6; color: #555;">
+       IND: Kami menyediakan kartu Pokémon original dengan kualitas terbaik. 
+       Silakan pilih kartu favoritmu dan lakukan checkout untuk melanjutkan pemesanan.
+    </p>
+       <p>
+       ENG:We offer authentic Pokémon cards of the highest quality. Please select your favorite card and proceed to checkout to proceed with your order.
+    </p>
+    <div style="font-size: 0.9em; color: #333; margin-top: 10px;">
+        <strong>Ketentuan/Confirmations:</strong>
+        <ul style="padding-left: 20px; margin-top: 5px;">
+            <h4>IND:</h4>
+            <li>Semua produk 100% Original.</li>
+            <li>Pembayaran via Transfer Bank/QRIS.</li>
+            <li>Konfirmasi order akan dilakukan via WhatsApp.</li>
+            <li>Jika udah checkout,tidak bis retur.</li>
+            <h4>ENG:</h4>
+          <li>  All products are 100% original. </li>
+<li>Payment via Bank Transfer/QRIS. </li>
+<li>Order confirmation will be made via WhatsApp. </li>
+<li>If you've checkout a specific product,a return is prohibited.</li>
+        </ul>
+    </div>
+</div>
+        <input type="text" id="searchBar" placeholder="🔍 Cari kartu..." onkeyup="filterProducts()">
+<button onclick="document.getElementById('cameraInput').click()">📷 Scan Kartu</button>
+
+<input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none;" onchange="handleCameraScan(event)">
+        <div class="grid" id="productGrid">
+            <div class="card" data-name="Gholdengo ex">
+                <div class="review-section" style="margin-top: 15px; border-top: 1px solid #ccc; padding-top: 10px;">
+    <input type="text" placeholder="Tulis review..." class="review-input" style="width: 80%; padding: 5px;">
+    <button onclick="addReview(this)" style="padding: 5px 10px; width: auto; font-size: 0.8em;">Kirim</button>
+    <div class="reviews-list" style="margin-top: 5px; font-size: 0.85em; text-align: left;"></div>
+</div>
+                <img src="gholdengo.png">
+                <h3>Gholdengo ex JPN 220/187</h3>
+                <p class="price">Rp 300.000</p><p style="color: green; font-size: 0.9em;">Status: Tersedia (1)</p>
+
+                <button class="tambah-btn" onclick="addToCart('Gholdengo ex JPN 220/187', 300000)">Tambah ke keranjang</button>
+            </div>
+            <div class="card" data-name="Shiny Mew ex ENG 216/091">
+              <div class="review-section" style="margin-top: 15px; border-top: 1px solid #ccc; padding-top: 10px;">
+    <input type="text" placeholder="Tulis review..." class="review-input" style="width: 80%; padding: 5px;">
+    <button onclick="addReview(this)" style="padding: 5px 10px; width: auto; font-size: 0.8em;">Kirim</button>
+    <div class="reviews-list" style="margin-top: 5px; font-size: 0.85em; text-align: left;"></div>
+</div>
+                <img src="mew.jpg">
+                <h3>Shiny Mew ex ENG 216/091</h3>
+                <p class="price">Rp 770.000</p>
+                <p style="color: green; font-size: 0.9em;">Status: Tersedia (1)</p>
+                <button class="tambah-btn" onclick="addToCart('Shiny Mew ex ENG 216/091', 770000)">Tambah ke Keranjang</button>
+            </div>
+            <div class="card" data-name="Victini V ENG 144/163  ">
+      <div class="review-section" style="margin-top: 15px; border-top: 1px solid #ccc; padding-top: 10px;">
+    <input type="text" placeholder="Tulis review..." class="review-input" style="width: 80%; padding: 5px;">
+    <button onclick="addReview(this)" style="padding: 5px 10px; width: auto; font-size: 0.8em;">Kirim</button>
+    <div class="reviews-list" style="margin-top: 5px; font-size: 0.85em; text-align: left;"></div>
+</div>
+                <img src="victini.png" onerror="this.src='victini.jpg'">
+                <h3>Victini V ENG 144/163 </h3>
+                <p class="price">Rp 250.000</p>
+                 <p style="color: green; font-size: 0.9em;">Status: Tersedia (1)</p>
+                <button class="tambah-btn" onclick="addToCart('Victini V ENG 144/163', 250000)">Tambah ke Keranjang</button>
+            </div>
+            <div class="card" data-name="Lucario & Melmetal GX JPN 058/054">
+              <div class="review-section" style="margin-top: 15px; border-top: 1px solid #ccc; padding-top: 10px;">
+    <input type="text" placeholder="Tulis review..." class="review-input" style="width: 80%; padding: 5px;">
+    <button onclick="addReview(this)" style="padding: 5px 10px; width: auto; font-size: 0.8em;">Kirim</button>
+    <div class="reviews-list" style="margin-top: 5px; font-size: 0.85em; text-align: left;"></div>
+</div>
+                <img src="lucario.jpg" onerror="this.src='lucario.jpg'">
+                <h3>Lucario & Melmetal GX JPN 058/054</h3>
+                <p class="price">Rp 670.000</p>
+                <p style="color: green; font-size: 0.9em;">Status: Tersedia (1)</p>
+                <button class="tambah-btn" onclick="addToCart('Lucario & Melmetal GX JPN 058/054', 670000)">Tambah ke Keranjang</button>
+            </div>
+            <div class="card" data-name="Zamazenta V INDO 232/174">
+      <div class="review-section" style="margin-top: 15px; border-top: 1px solid #ccc; padding-top: 10px;">
+    <input type="text" placeholder="Tulis review..." class="review-input" style="width: 80%; padding: 5px;">
+    <button onclick="addReview(this)" style="padding: 5px 10px; width: auto; font-size: 0.8em;">Kirim</button>
+    <div class="reviews-list" style="margin-top: 5px; font-size: 0.85em; text-align: left;"></div>
+</div>
+                <img src="zamazenta.jpeg" onerror="this.src='zamazenta.jpeg'">
+                <h3>Zamazenta V INDO 232/174</h3>
+                <p class="price">Rp 550.000</p>
+                <p style="color: green; font-size: 0.9em;">Status: Tersedia (1)</p>
+                <button class="tambah-btn" onclick="addToCart('Zamazenta V INDO 232/174', 670000)">Tambah ke Keranjang</button>
+            </div>
+            <div class="card" data-name="MYSTERY PACK!!  ">
+      <div class="review-section" style="margin-top: 15px; border-top: 1px solid #ccc; padding-top: 10px;">
+    <input type="text" placeholder="Tulis review..." class="review-input" style="width: 80%; padding: 5px;">
+    <button onclick="addReview(this)" style="padding: 5px 10px; width: auto; font-size: 0.8em;">Kirim</button>
+    <div class="reviews-list" style="margin-top: 5px; font-size: 0.85em; text-align: left;"></div>
+</div>
+                <img src="mystery.webp" onerror="this.src='mystery.webp'">
+                <h3>MYSTERY BULK PACK GUARANTEE HIT!!</h3>
+                <p class="price">Rp 25.000</p>
+                 <p style="color: green; font-size: 0.9em;">Status: Tersedia (1)</p>
+                <button class="tambah-btn" onclick="addToCart('MYSTERY PACK!', 25000)">Tambah ke Keranjang</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="cart">
+    <h2>Keranjang</h2>
+    <div id="cart-items">Keranjang kosong.</div>
+    <hr>
+    <h3>Total: <span id="total-price">Rp 0</span></h3>
+    
+    <p>Catatan Tambahan (Optional):</p>
+    <textarea id="checkout-note" style="width: 90%; height: 50px; margin-bottom: 10px;"></textarea>
+    
+    <button class="checkout-btn" onclick="checkout()">Checkout (WA)</button>
+</div>
+<footer style="margin-top: 40px; padding: 20px; text-align: center; color: white; background: rgba(0, 0, 0, 0.2); border-radius: 20px;">
+    <p>&copy; 2026 PokeMart Indonesia. All rights reserved.</p>
+    <p style="font-size: 0.8em;">Original Pokémon Cards | Trusted Seller</p>
+</footer>
+    <script>
+        function addReview(btn) {
+    const input = btn.previousElementSibling;
+    const reviewText = input.value;
+    
+    if (reviewText.trim() !== "") {
+        const list = btn.parentElement.querySelector('.reviews-list');
+        const newReview = document.createElement('p');
+        newReview.innerText = "⭐ " + reviewText;
+        list.appendChild(newReview);
+        input.value = ""; // Clear the input box
+    }
+}
+        function handleCameraScan(event) {
+    const file = event.target.files[0];
+    if (file) {
+        // Here you would normally use an AI API to read the image.
+        // Since we are doing this locally, we simulate the scan by 
+        // letting the user know the image was received.
+        alert("Gambar berhasil diambil! (Fitur scan AI akan terhubung ke API Anda di sini)");
+        
+        // Example: If you want to automatically trigger a search for a specific name
+        // document.getElementById('searchBar').value = "Zamazenta";
+        // filterProducts(); 
+    }
+}
+        // Search Functionality
+        function filterProducts() {
+            let input = document.getElementById('searchBar').value.toLowerCase();
+            let cards = document.getElementsByClassName('card');
+            for (let card of cards) {
+                let name = card.getAttribute('data-name').toLowerCase();
+                card.style.display = name.includes(input) ? "block" : "none";
+            }
+        }
+
+        // Logic
+        window.addEventListener('DOMContentLoaded', () => {
+            const loader = document.getElementById('loading-screen');
+            setTimeout(() => { loader.style.opacity = '0'; setTimeout(() => { loader.style.display = 'none'; }, 500); }, 1000);
+        });
+
+        let cart = [];
+        let total = 0;
+        const MY_WHATSAPP_NUMBER = "6281779997989"; 
+        
+function addToCart(name, price) {
+    // Add to data
+    cart.push({name, price});
+    total += price;
+
+    // Update total
+    document.getElementById('total-price').innerText = 'Rp ' + total.toLocaleString();
+
+    // Update the list
+    const list = document.getElementById('cart-items');
+    
+    // Clear "Keranjang kosong." text on first add
+    if (list.innerText === "Keranjang kosong.") {
+        list.innerText = "";
+    }
+
+    // Add the new item
+    const div = document.createElement('div');
+    div.style.display = "flex";
+    div.style.justifyContent = "space-between";
+    div.style.marginBottom = "5px";
+    
+    div.innerHTML = `
+        <span>${name} - Rp ${price.toLocaleString()}</span>
+        <button onclick="removeItem(this, ${price})" style="background:red; color:white; border:none; cursor:pointer;">X</button>
+    `;
+    
+    list.appendChild(div);
+    alert(name + " ditambahkan!");
+}
+
+function removeItem(btn, price) {
+    total -= price;
+    document.getElementById('total-price').innerText = 'Rp ' + total.toLocaleString();
+    
+    const list = document.getElementById('cart-items');
+    btn.parentElement.remove();
+
+    // If list is empty, show "Keranjang kosong." again
+    if (list.innerHTML.trim() === "") {
+        list.innerText = "Keranjang kosong.";
+    }
+
+
+
+}
+        
+        function updateCartDisplay() {
+            const cartDiv = document.getElementById('cart-items');
+            cartDiv.innerHTML = cart.length === 0 ? "Keranjang kosong." : cart.map(i => `<div>${i.name}</div>`).join('');
+            document.getElementById('total-price').innerText = 'Rp ' + total.toLocaleString();
+        }
+        function checkout() {
+    if(cart.length === 0) return;
+    
+    // Get the note from the text area
+    let note = document.getElementById('checkout-note').value;
+    
+    let msg = "Halo, saya mau beli: " + cart.map(i => i.name).join(", ") + ". Total: " + document.getElementById('total-price').innerText;
+    
+    // If there is a note, add it to the message
+    if (note.trim() !== "") {
+        msg += "%0A%0ACatatan: " + note;
+    }
+    
+    window.open("https://wa.me/" + MY_WHATSAPP_NUMBER + "?text=" + msg);
+}
+        
+    </script>
+</body>
+</html>
