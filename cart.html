@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Keranjang Saya</title>
+    <style>
+        body { margin: 0; font-family: sans-serif; overflow: hidden; }
+        
+        #cart-video { position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; z-index: -1; object-fit: cover; }
+
+        .container { 
+            background: rgba(255, 255, 255, 0.8); 
+            backdrop-filter: blur(10px); 
+            width: 80%; 
+            max-width: 500px;
+            margin: 50px auto; 
+            padding: 20px; 
+            border-radius: 15px; 
+            text-align: center;
+        }
+
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #ddd; }
+        
+        .remove-btn { background: #ff4d4d; color: white; border: none; padding: 5px 12px; border-radius: 5px; cursor: pointer; }
+
+        #totalSection { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 20px; }
+
+        .checkout-btn { background-color: #25D366; color: white; padding: 12px 25px; border: none; border-radius: 25px; font-weight: bold; cursor: pointer; width: 90%; }
+
+        /* THIS IS THE BUTTON STYLE */
+        .back-btn {
+            display: inline-block;
+            background-color: #555;
+            color: white !important;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        #buyerNote { width: 90%; height: 60px; border-radius: 10px; padding: 10px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+
+    <video autoplay muted loop id="cart-video">
+        <source src="cartbg.mp4" type="video/mp4">
+    </video>
+
+    <div class="container">
+        <h2>Keranjang Belanja 🛒</h2>
+        <div id="cartList"></div>
+        <div id="totalSection"></div>
+    </div>
+<footer style="margin-top: 40px; padding: 20px; text-align: center; color: white; background: rgba(0, 0, 0, 0.2); border-radius: 20px;">
+    <p>&copy; 2026 aldsMart Indonesia. All rights reserved.</p>
+    <p style="font-size: 0.8em;">Original Pokémon Cards | Trusted Seller</p>
+</footer>
+<script>
+    function loadCart() {
+        let cart = JSON.parse(localStorage.getItem('myCart')) || [];
+        let list = document.getElementById('cartList');
+        let totalSection = document.getElementById('totalSection');
+        
+        if (cart.length === 0) {
+            list.innerHTML = "<p>Keranjang masih kosong.</p>";
+            totalSection.innerHTML = '<a href="index.html" class="back-btn">Kembali ke Toko</a>';
+        } else {
+            let total = 0;
+            list.innerHTML = "";
+            cart.forEach((item, index) => {
+                total += item.price;
+                list.innerHTML += `
+                    <div class="cart-item">
+                        <span>${item.name} - <b>Rp${item.price.toLocaleString()}</b></span>
+                        <button class="remove-btn" onclick="removeItem(${index})">✕</button>
+                    </div>`;
+            });
+            
+            totalSection.innerHTML = `
+                <h3>Total: Rp${total.toLocaleString()}</h3>
+                <textarea id="buyerNote" placeholder="Tulis alamat atau catatan di sini..."></textarea>
+                <button class="checkout-btn" onclick="checkout(${total})">Checkout via WhatsApp</button>
+                <a href="code2.html" class="back-btn">Kembali ke Toko</a>
+            `;
+        }
+    }
+
+    function removeItem(index) {
+        let cart = JSON.parse(localStorage.getItem('myCart'));
+        cart.splice(index, 1);
+        localStorage.setItem('myCart', JSON.stringify(cart));
+        loadCart();
+    }
+
+    function checkout(total) {
+        let cart = JSON.parse(localStorage.getItem('myCart'));
+        let note = document.getElementById('buyerNote').value;
+        let message = "Halo, saya ingin memesan:%0A";
+        cart.forEach(item => message += `- ${item.name}%0A`);
+        message += "%0A*Total: Rp" + total.toLocaleString() + "*";
+        message += "%0A%0A*Catatan:* " + note;
+        window.open("https://wa.me/6281234567890?text=" + message, "_blank");
+    }
+
+    loadCart();
+</script>
+</body>
+</html>
